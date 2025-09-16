@@ -23,7 +23,7 @@ const [students, setStudents] = useState([]);
   const [gradeFilter, setGradeFilter] = useState("all");
   const [showModal, setShowModal] = useState(false);
   const [editingStudent, setEditingStudent] = useState(null);
-  const [formData, setFormData] = useState({
+const [formData, setFormData] = useState({
     first_name_c: "",
     last_name_c: "",
     email_c: "",
@@ -33,7 +33,8 @@ const [students, setStudents] = useState([]);
     status_c: "Active",
     grade_c: "9th",
     parent_contact_c: "",
-    address_c: ""
+    address_c: "",
+    science_marks_c: ""
   });
 
   const loadStudents = async () => {
@@ -87,17 +88,18 @@ let filtered = students;
       }
       setShowModal(false);
       setEditingStudent(null);
-      setFormData({
-        firstName: "",
-        lastName: "",
-        email: "",
-        phone: "",
-        dateOfBirth: "",
-        enrollmentDate: "",
-        status: "Active",
-        grade: "9th",
-        parentContact: "",
-        address: ""
+setFormData({
+        first_name_c: "",
+        last_name_c: "",
+        email_c: "",
+        phone_c: "",
+        date_of_birth_c: "",
+        enrollment_date_c: "",
+        status_c: "Active",
+        grade_c: "9th",
+        parent_contact_c: "",
+        address_c: "",
+        science_marks_c: ""
       });
       loadStudents();
     } catch (err) {
@@ -125,17 +127,18 @@ if (window.confirm(`Are you sure you want to delete ${student.first_name_c} ${st
 
   const handleAddNew = () => {
     setEditingStudent(null);
-    setFormData({
-      firstName: "",
-      lastName: "",
-      email: "",
-      phone: "",
-      dateOfBirth: "",
-      enrollmentDate: "",
-      status: "Active",
-      grade: "9th",
-      parentContact: "",
-      address: ""
+setFormData({
+      first_name_c: "",
+      last_name_c: "",
+      email_c: "",
+      phone_c: "",
+      date_of_birth_c: "",
+      enrollment_date_c: "",
+      status_c: "Active",
+      grade_c: "9th",
+      parent_contact_c: "",
+      address_c: "",
+      science_marks_c: ""
     });
     setShowModal(true);
   };
@@ -300,11 +303,18 @@ const columns = [
               onChange={(e) => setFormData({ ...formData, parent_contact_c: e.target.value })}
               required
             />
-          </div>
+</div>
           <Input
             label="Address"
             value={formData.address_c}
             onChange={(e) => setFormData({ ...formData, address_c: e.target.value })}
+            required
+          />
+          <Input
+            label="Science Marks"
+            type="number"
+            value={formData.science_marks_c}
+            onChange={(e) => setFormData({ ...formData, science_marks_c: e.target.value })}
             required
           />
           <div className="flex justify-end space-x-3 pt-4">
