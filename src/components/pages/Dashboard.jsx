@@ -43,10 +43,13 @@ const Dashboard = () => {
   if (loading) return <Loading type="cards" />;
   if (error) return <Error message={error} onRetry={loadDashboardData} />;
 
-  const activeStudents = students.filter(s => s.status === "Active").length;
-  const activeTeachers = teachers.filter(t => t.status === "Active").length;
+const activeStudents = students.filter(s => s.status_c === "Active").length;
+  const activeTeachers = teachers.filter(t => t.status_c === "Active").length;
   const totalClasses = classes.length;
-  const totalEnrollments = classes.reduce((sum, c) => sum + c.studentIds.length, 0);
+  const totalEnrollments = classes.reduce((sum, c) => {
+    const studentIds = typeof c.student_ids_c === 'string' ? c.student_ids_c.split(',') : (c.student_ids_c || []);
+    return sum + studentIds.length;
+  }, 0);
 
   const recentActivities = [
     {
@@ -180,18 +183,20 @@ const Dashboard = () => {
           <h3 className="text-lg font-semibold text-secondary-900 mb-4">Class Overview</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {classes.slice(0, 6).map((classItem) => (
-              <div
+<div
                 key={classItem.Id}
                 className="p-4 bg-secondary-50 rounded-lg border border-secondary-200"
               >
                 <div className="flex items-center justify-between mb-2">
-                  <h4 className="font-medium text-secondary-900">{classItem.name}</h4>
-                  <span className="text-xs text-secondary-500">Room {classItem.room}</span>
+                  <h4 className="font-medium text-secondary-900">{classItem.name_c}</h4>
+                  <span className="text-xs text-secondary-500">Room {classItem.room_c}</span>
                 </div>
-                <p className="text-sm text-secondary-600 mb-2">{classItem.subject}</p>
+                <p className="text-sm text-secondary-600 mb-2">{classItem.subject_c}</p>
                 <div className="flex items-center justify-between text-xs text-secondary-500">
-                  <span>{classItem.studentIds.length} students</span>
-                  <span>Capacity: {classItem.capacity}</span>
+                  <span>
+                    {typeof classItem.student_ids_c === 'string' ? classItem.student_ids_c.split(',').length : (classItem.student_ids_c || []).length} students
+                  </span>
+                  <span>Capacity: {classItem.capacity_c}</span>
                 </div>
               </div>
             ))}

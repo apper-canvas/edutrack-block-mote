@@ -15,7 +15,7 @@ import ApperIcon from "@/components/ApperIcon";
 import { teacherService } from "@/services/api/teacherService";
 
 const Teachers = () => {
-  const [teachers, setTeachers] = useState([]);
+const [teachers, setTeachers] = useState([]);
   const [filteredTeachers, setFilteredTeachers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -25,14 +25,14 @@ const Teachers = () => {
   const [showModal, setShowModal] = useState(false);
   const [editingTeacher, setEditingTeacher] = useState(null);
   const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
-    email: "",
-    phone: "",
-    subjects: [],
-    hireDate: "",
-    department: "",
-    status: "Active"
+    first_name_c: "",
+    last_name_c: "",
+    email_c: "",
+    phone_c: "",
+    subjects_c: [],
+    hire_date_c: "",
+    department_c: "",
+    status_c: "Active"
   });
 
   const loadTeachers = async () => {
@@ -54,22 +54,22 @@ const Teachers = () => {
   }, []);
 
   useEffect(() => {
-    let filtered = teachers;
+let filtered = teachers;
 
     if (searchTerm) {
       filtered = filtered.filter(teacher =>
-        `${teacher.firstName} ${teacher.lastName}`.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        teacher.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        teacher.department.toLowerCase().includes(searchTerm.toLowerCase())
+        `${teacher.first_name_c} ${teacher.last_name_c}`.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        teacher.email_c.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        teacher.department_c.toLowerCase().includes(searchTerm.toLowerCase())
       );
     }
 
     if (departmentFilter !== "all") {
-      filtered = filtered.filter(teacher => teacher.department === departmentFilter);
+      filtered = filtered.filter(teacher => teacher.department_c === departmentFilter);
     }
 
     if (statusFilter !== "all") {
-      filtered = filtered.filter(teacher => teacher.status === statusFilter);
+      filtered = filtered.filter(teacher => teacher.status_c === statusFilter);
     }
 
     setFilteredTeachers(filtered);
@@ -115,7 +115,7 @@ const Teachers = () => {
   };
 
   const handleDelete = async (teacher) => {
-    if (window.confirm(`Are you sure you want to delete ${teacher.firstName} ${teacher.lastName}?`)) {
+if (window.confirm(`Are you sure you want to delete ${teacher.first_name_c} ${teacher.last_name_c}?`)) {
       try {
         await teacherService.delete(teacher.Id);
         toast.success("Teacher deleted successfully!");
@@ -156,7 +156,7 @@ const Teachers = () => {
     setFormData({ ...formData, subjects: newSubjects });
   };
 
-  const departments = [...new Set(teachers.map(t => t.department))];
+const departments = [...new Set(teachers.map(t => t.department_c))];
 
   if (loading) return <Loading type="cards" />;
   if (error) return <Error message={error} onRetry={loadTeachers} />;
@@ -228,7 +228,7 @@ const Teachers = () => {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredTeachers.map((teacher) => (
-              <Card key={teacher.Id} className="hover:shadow-lg transition-shadow">
+<Card key={teacher.Id} className="hover:shadow-lg transition-shadow">
                 <div className="flex items-start justify-between mb-4">
                   <div className="flex items-center space-x-3">
                     <div className="w-12 h-12 bg-gradient-to-br from-primary-500 to-primary-600 rounded-full flex items-center justify-center">
@@ -236,28 +236,28 @@ const Teachers = () => {
                     </div>
                     <div>
                       <h3 className="font-semibold text-secondary-900">
-                        {teacher.firstName} {teacher.lastName}
+                        {teacher.first_name_c} {teacher.last_name_c}
                       </h3>
-                      <p className="text-sm text-secondary-600">{teacher.department}</p>
+                      <p className="text-sm text-secondary-600">{teacher.department_c}</p>
                     </div>
                   </div>
-                  <Badge variant={teacher.status === "Active" ? "success" : "default"}>
-                    {teacher.status}
+                  <Badge variant={teacher.status_c === "Active" ? "success" : "default"}>
+                    {teacher.status_c}
                   </Badge>
                 </div>
                 
                 <div className="space-y-2 mb-4">
                   <div className="flex items-center text-sm text-secondary-600">
                     <ApperIcon name="Mail" className="h-4 w-4 mr-2" />
-                    {teacher.email}
+                    {teacher.email_c}
                   </div>
                   <div className="flex items-center text-sm text-secondary-600">
                     <ApperIcon name="Phone" className="h-4 w-4 mr-2" />
-                    {teacher.phone}
+                    {teacher.phone_c}
                   </div>
                   <div className="flex items-start text-sm text-secondary-600">
                     <ApperIcon name="BookOpen" className="h-4 w-4 mr-2 mt-0.5" />
-                    <span>{teacher.subjects.join(", ")}</span>
+                    <span>{typeof teacher.subjects_c === 'string' ? teacher.subjects_c.split(',').join(', ') : (teacher.subjects_c || []).join(', ')}</span>
                   </div>
                 </div>
                 
@@ -327,10 +327,10 @@ const Teachers = () => {
               required
             />
             <div className="md:col-span-2">
-              <Select
+<Select
                 label="Status"
-                value={formData.status}
-                onChange={(e) => setFormData({ ...formData, status: e.target.value })}
+                value={formData.status_c}
+                onChange={(e) => setFormData({ ...formData, status_c: e.target.value })}
                 required
               >
                 <option value="Active">Active</option>

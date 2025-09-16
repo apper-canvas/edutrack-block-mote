@@ -17,7 +17,7 @@ import { teacherService } from "@/services/api/teacherService";
 import { studentService } from "@/services/api/studentService";
 
 const Classes = () => {
-  const [classes, setClasses] = useState([]);
+const [classes, setClasses] = useState([]);
   const [filteredClasses, setFilteredClasses] = useState([]);
   const [teachers, setTeachers] = useState([]);
   const [students, setStudents] = useState([]);
@@ -28,13 +28,13 @@ const Classes = () => {
   const [showModal, setShowModal] = useState(false);
   const [editingClass, setEditingClass] = useState(null);
   const [formData, setFormData] = useState({
-    name: "",
-    subject: "",
-    teacherId: "",
-    studentIds: [],
-    schedule: "",
-    room: "",
-    capacity: ""
+    name_c: "",
+    subject_c: "",
+    teacher_id_c: "",
+    student_ids_c: [],
+    schedule_c: "",
+    room_c: "",
+    capacity_c: ""
   });
 
   const loadData = async () => {
@@ -62,13 +62,13 @@ const Classes = () => {
   }, []);
 
   useEffect(() => {
-    let filtered = classes;
+let filtered = classes;
 
     if (searchTerm) {
       filtered = filtered.filter(classItem =>
-        classItem.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        classItem.subject.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        classItem.room.toLowerCase().includes(searchTerm.toLowerCase())
+        classItem.name_c.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        classItem.subject_c.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        classItem.room_c.toLowerCase().includes(searchTerm.toLowerCase())
       );
     }
 
@@ -84,9 +84,9 @@ const Classes = () => {
     try {
       const classData = {
         ...formData,
-        teacherId: parseInt(formData.teacherId),
-        studentIds: formData.studentIds.map(id => parseInt(id)),
-        capacity: parseInt(formData.capacity)
+teacher_id_c: parseInt(formData.teacher_id_c),
+        student_ids_c: formData.student_ids_c.map(id => parseInt(id)),
+        capacity_c: parseInt(formData.capacity_c)
       };
       
       if (editingClass) {
@@ -114,18 +114,18 @@ const Classes = () => {
   };
 
   const handleEdit = (classItem) => {
-    setEditingClass(classItem);
+setEditingClass(classItem);
     setFormData({
       ...classItem,
-      teacherId: classItem.teacherId.toString(),
-      studentIds: classItem.studentIds.map(id => id.toString()),
-      capacity: classItem.capacity.toString()
+      teacher_id_c: classItem.teacher_id_c?.Id || classItem.teacher_id_c?.toString() || "",
+      student_ids_c: typeof classItem.student_ids_c === 'string' ? classItem.student_ids_c.split(',') : (classItem.student_ids_c || []).map(id => id.toString()),
+      capacity_c: classItem.capacity_c?.toString() || ""
     });
     setShowModal(true);
   };
 
   const handleDelete = async (classItem) => {
-    if (window.confirm(`Are you sure you want to delete ${classItem.name}?`)) {
+if (window.confirm(`Are you sure you want to delete ${classItem.name_c}?`)) {
       try {
         await classService.delete(classItem.Id);
         toast.success("Class deleted successfully!");
@@ -151,26 +151,27 @@ const Classes = () => {
   };
 
   const handleStudentSelect = (studentId) => {
-    const currentIds = formData.studentIds;
+const currentIds = formData.student_ids_c;
     const newIds = currentIds.includes(studentId)
       ? currentIds.filter(id => id !== studentId)
       : [...currentIds, studentId];
-    setFormData({ ...formData, studentIds: newIds });
+    setFormData({ ...formData, student_ids_c: newIds });
   };
 
-  const getTeacherName = (teacherId) => {
-    const teacher = teachers.find(t => t.Id === teacherId);
-    return teacher ? `${teacher.firstName} ${teacher.lastName}` : "Unknown Teacher";
+const getTeacherName = (teacherId) => {
+    const teacher = teachers.find(t => t.Id === (teacherId?.Id || teacherId));
+    return teacher ? `${teacher.first_name_c} ${teacher.last_name_c}` : "Unknown Teacher";
   };
 
-  const getStudentNames = (studentIds) => {
-    return studentIds.map(id => {
+const getStudentNames = (studentIds) => {
+    const ids = typeof studentIds === 'string' ? studentIds.split(',').map(id => parseInt(id.trim())) : studentIds;
+    return ids.map(id => {
       const student = students.find(s => s.Id === id);
-      return student ? `${student.firstName} ${student.lastName}` : "Unknown";
+      return student ? `${student.first_name_c} ${student.last_name_c}` : "Unknown";
     });
   };
 
-  const subjects = [...new Set(classes.map(c => c.subject))];
+const subjects = [...new Set(classes.map(c => c.subject_c))];
 
   if (loading) return <Loading type="cards" />;
   if (error) return <Error message={error} onRetry={loadData} />;
@@ -233,31 +234,31 @@ const Classes = () => {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredClasses.map((classItem) => (
-              <Card key={classItem.Id} className="hover:shadow-lg transition-shadow">
+<Card key={classItem.Id} className="hover:shadow-lg transition-shadow">
                 <div className="flex items-start justify-between mb-4">
                   <div>
                     <h3 className="font-semibold text-secondary-900 mb-1">
-                      {classItem.name}
+                      {classItem.name_c}
                     </h3>
-                    <Badge variant="primary">{classItem.subject}</Badge>
+                    <Badge variant="primary">{classItem.subject_c}</Badge>
                   </div>
                   <div className="text-right text-sm text-secondary-500">
-                    Room {classItem.room}
+                    Room {classItem.room_c}
                   </div>
                 </div>
                 
                 <div className="space-y-3 mb-4">
                   <div className="flex items-center text-sm text-secondary-600">
                     <ApperIcon name="User" className="h-4 w-4 mr-2" />
-                    {getTeacherName(classItem.teacherId)}
+                    {getTeacherName(classItem.teacher_id_c)}
                   </div>
                   <div className="flex items-center text-sm text-secondary-600">
                     <ApperIcon name="Users" className="h-4 w-4 mr-2" />
-                    {classItem.studentIds.length} / {classItem.capacity} students
+                    {typeof classItem.student_ids_c === 'string' ? classItem.student_ids_c.split(',').length : (classItem.student_ids_c || []).length} / {classItem.capacity_c} students
                   </div>
                   <div className="flex items-start text-sm text-secondary-600">
                     <ApperIcon name="Clock" className="h-4 w-4 mr-2 mt-0.5" />
-                    <span className="leading-tight">{classItem.schedule}</span>
+                    <span className="leading-tight">{classItem.schedule_c}</span>
                   </div>
                 </div>
                 
@@ -268,14 +269,14 @@ const Classes = () => {
                     </span>
                   </div>
                   <div className="flex flex-wrap gap-1">
-                    {getStudentNames(classItem.studentIds).slice(0, 3).map((name, idx) => (
+                    {getStudentNames(classItem.student_ids_c).slice(0, 3).map((name, idx) => (
                       <Badge key={idx} variant="default" className="text-xs">
                         {name}
                       </Badge>
                     ))}
-                    {classItem.studentIds.length > 3 && (
+                    {getStudentNames(classItem.student_ids_c).length > 3 && (
                       <Badge variant="default" className="text-xs">
-                        +{classItem.studentIds.length - 3} more
+                        +{getStudentNames(classItem.student_ids_c).length - 3} more
                       </Badge>
                     )}
                   </div>
@@ -326,10 +327,10 @@ const Classes = () => {
               onChange={(e) => setFormData({ ...formData, teacherId: e.target.value })}
               required
             >
-              <option value="">Select a teacher</option>
-              {teachers.filter(t => t.status === "Active").map(teacher => (
+<option value="">Select a teacher</option>
+              {teachers.filter(t => t.status_c === "Active").map(teacher => (
                 <option key={teacher.Id} value={teacher.Id}>
-                  {teacher.firstName} {teacher.lastName}
+                  {teacher.first_name_c} {teacher.last_name_c}
                 </option>
               ))}
             </Select>
@@ -362,16 +363,16 @@ const Classes = () => {
             </label>
             <div className="max-h-48 overflow-y-auto border border-secondary-300 rounded-lg p-3">
               <div className="space-y-2">
-                {students.filter(s => s.status === "Active").map(student => (
+{students.filter(s => s.status_c === "Active").map(student => (
                   <label key={student.Id} className="flex items-center">
                     <input
                       type="checkbox"
-                      checked={formData.studentIds.includes(student.Id.toString())}
+                      checked={formData.student_ids_c.includes(student.Id.toString())}
                       onChange={() => handleStudentSelect(student.Id.toString())}
                       className="mr-2"
                     />
                     <span className="text-sm">
-                      {student.firstName} {student.lastName} ({student.grade})
+                      {student.first_name_c} {student.last_name_c} ({student.grade_c})
                     </span>
                   </label>
                 ))}

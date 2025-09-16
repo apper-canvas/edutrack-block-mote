@@ -14,7 +14,7 @@ import ApperIcon from "@/components/ApperIcon";
 import { studentService } from "@/services/api/studentService";
 
 const Students = () => {
-  const [students, setStudents] = useState([]);
+const [students, setStudents] = useState([]);
   const [filteredStudents, setFilteredStudents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -24,16 +24,16 @@ const Students = () => {
   const [showModal, setShowModal] = useState(false);
   const [editingStudent, setEditingStudent] = useState(null);
   const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
-    email: "",
-    phone: "",
-    dateOfBirth: "",
-    enrollmentDate: "",
-    status: "Active",
-    grade: "9th",
-    parentContact: "",
-    address: ""
+    first_name_c: "",
+    last_name_c: "",
+    email_c: "",
+    phone_c: "",
+    date_of_birth_c: "",
+    enrollment_date_c: "",
+    status_c: "Active",
+    grade_c: "9th",
+    parent_contact_c: "",
+    address_c: ""
   });
 
   const loadStudents = async () => {
@@ -55,21 +55,21 @@ const Students = () => {
   }, []);
 
   useEffect(() => {
-    let filtered = students;
+let filtered = students;
 
     if (searchTerm) {
       filtered = filtered.filter(student =>
-        `${student.firstName} ${student.lastName}`.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        student.email.toLowerCase().includes(searchTerm.toLowerCase())
+        `${student.first_name_c} ${student.last_name_c}`.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        student.email_c.toLowerCase().includes(searchTerm.toLowerCase())
       );
     }
 
     if (statusFilter !== "all") {
-      filtered = filtered.filter(student => student.status === statusFilter);
+      filtered = filtered.filter(student => student.status_c === statusFilter);
     }
 
     if (gradeFilter !== "all") {
-      filtered = filtered.filter(student => student.grade === gradeFilter);
+      filtered = filtered.filter(student => student.grade_c === gradeFilter);
     }
 
     setFilteredStudents(filtered);
@@ -112,7 +112,7 @@ const Students = () => {
   };
 
   const handleDelete = async (student) => {
-    if (window.confirm(`Are you sure you want to delete ${student.firstName} ${student.lastName}?`)) {
+if (window.confirm(`Are you sure you want to delete ${student.first_name_c} ${student.last_name_c}?`)) {
       try {
         await studentService.delete(student.Id);
         toast.success("Student deleted successfully!");
@@ -140,13 +140,13 @@ const Students = () => {
     setShowModal(true);
   };
 
-  const columns = [
-    { key: "firstName", label: "First Name" },
-    { key: "lastName", label: "Last Name" },
-    { key: "email", label: "Email" },
-    { key: "grade", label: "Grade" },
-    { key: "status", label: "Status" },
-    { key: "enrollmentDate", label: "Enrollment Date" }
+const columns = [
+    { key: "first_name_c", label: "First Name" },
+    { key: "last_name_c", label: "Last Name" },
+    { key: "email_c", label: "Email" },
+    { key: "grade_c", label: "Grade" },
+    { key: "status_c", label: "Status" },
+    { key: "enrollment_date_c", label: "Enrollment Date" }
   ];
 
   if (loading) return <Loading type="table" />;
@@ -235,49 +235,49 @@ const Students = () => {
       >
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <Input
+<Input
               label="First Name"
-              value={formData.firstName}
-              onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
+              value={formData.first_name_c}
+              onChange={(e) => setFormData({ ...formData, first_name_c: e.target.value })}
               required
             />
             <Input
               label="Last Name"
-              value={formData.lastName}
-              onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
+              value={formData.last_name_c}
+              onChange={(e) => setFormData({ ...formData, last_name_c: e.target.value })}
               required
             />
             <Input
               label="Email"
               type="email"
-              value={formData.email}
-              onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+              value={formData.email_c}
+              onChange={(e) => setFormData({ ...formData, email_c: e.target.value })}
               required
             />
             <Input
               label="Phone"
-              value={formData.phone}
-              onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+              value={formData.phone_c}
+              onChange={(e) => setFormData({ ...formData, phone_c: e.target.value })}
               required
             />
             <Input
               label="Date of Birth"
               type="date"
-              value={formData.dateOfBirth}
-              onChange={(e) => setFormData({ ...formData, dateOfBirth: e.target.value })}
+              value={formData.date_of_birth_c}
+              onChange={(e) => setFormData({ ...formData, date_of_birth_c: e.target.value })}
               required
             />
             <Input
               label="Enrollment Date"
               type="date"
-              value={formData.enrollmentDate}
-              onChange={(e) => setFormData({ ...formData, enrollmentDate: e.target.value })}
+              value={formData.enrollment_date_c}
+              onChange={(e) => setFormData({ ...formData, enrollment_date_c: e.target.value })}
               required
             />
             <Select
               label="Grade"
-              value={formData.grade}
-              onChange={(e) => setFormData({ ...formData, grade: e.target.value })}
+              value={formData.grade_c}
+              onChange={(e) => setFormData({ ...formData, grade_c: e.target.value })}
               required
             >
               <option value="9th">9th Grade</option>
@@ -287,8 +287,8 @@ const Students = () => {
             </Select>
             <Select
               label="Status"
-              value={formData.status}
-              onChange={(e) => setFormData({ ...formData, status: e.target.value })}
+              value={formData.status_c}
+              onChange={(e) => setFormData({ ...formData, status_c: e.target.value })}
               required
             >
               <option value="Active">Active</option>
@@ -296,15 +296,15 @@ const Students = () => {
             </Select>
             <Input
               label="Parent Contact"
-              value={formData.parentContact}
-              onChange={(e) => setFormData({ ...formData, parentContact: e.target.value })}
+              value={formData.parent_contact_c}
+              onChange={(e) => setFormData({ ...formData, parent_contact_c: e.target.value })}
               required
             />
           </div>
           <Input
             label="Address"
-            value={formData.address}
-            onChange={(e) => setFormData({ ...formData, address: e.target.value })}
+            value={formData.address_c}
+            onChange={(e) => setFormData({ ...formData, address_c: e.target.value })}
             required
           />
           <div className="flex justify-end space-x-3 pt-4">
