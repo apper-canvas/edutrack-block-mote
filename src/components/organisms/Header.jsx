@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import Button from "@/components/atoms/Button";
 import ApperIcon from "@/components/ApperIcon";
-import { AuthContext } from "../../../App";
+import { AuthContext } from "@/App";
 
 const Header = ({ title, onMenuClick }) => {
   const { logout } = useContext(AuthContext);
